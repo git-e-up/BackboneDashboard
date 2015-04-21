@@ -48,4 +48,27 @@ $(document).ready(function(event) {
   var dataFive = { title: "This", content: '<article style="background-color: red;">Is also a card</article>'};
   var fifthCard = new halfOfACardView(dataFive);
 
+
+
+  var cardModel = Backbone.Model.extend({
+	  initialize: function() {
+		console.log("Hey, a card is here!");
+	   }
+  });
+
+  var cardCollection = Backbone.Collection.extend({
+    initialize: function(){
+      console.log("Card collection initialized");
+    },
+    url: "/api/cards",
+    model: cardModel
+  });
+
+  var list = new cardCollection();
+  list.fetch()
+  list.models.length
+  // cardCollection.count()
+  list.create({ title: "one is the loneliest number", message: "it is the loneliest number"});
+
+
 });

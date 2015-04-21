@@ -8,11 +8,20 @@ ActiveRecord::Base.establish_connection(
 
 require './models/cards.rb'
 
+#Helper
+def card_parameters
+  request_body = JSON.parse(request.body.read.to_s)
+  { title: request_body["title"], message: request_body["message"] }
+end
+
 
 get '/' do
   erb :index
 end
 
+get '/variables' do
+  erb :variables
+end
 
 get '/api/cards' do
   content_type :json
@@ -28,34 +37,41 @@ get '/api/cards/:id' do
 end
 
 post '/api/cards' do
+  # content_type :json
+  # request_body = JSON.parse(request.body.read.to_s)
+  # card_args = { title: request_body ["title"], message: request_body["message"] }
+  card = Card.create(card_parameters)
   content_type :json
-  card = Card.create(params[:card])
   card.to_json
 end
 # Create a new card
 
 put '/api/cards/:id' do
-  content_type :json
+  # # content_type :json
+  # request_body = JSON.parse(request.body.read.to_s)
   card = Card.find(params[:id].to_i)
-  card.update(params[:card])
+  card.update(card_parameters)
+  content_type :json
   card.to_json
 end
 
 # Update an existing card
 
 patch '/api/cards/:id' do
-  content_type :json
+  # content_type :json
+  # request_body = JSON.parse(request.body.read.to_s)
   card = Card.find(params[:id].to_i)
-  card.update(params[:card])
+  card.update(card_parameters)
+  content_type :json
   card.to_json
-  end
+end
 # Update an existing card
 
 delete '/api/cards/:id' do
   content_type :json
   card = Card.delete(params[:id].to_i)
   card.to_json
-  end
+end
 # Delete an existing card
 
 
